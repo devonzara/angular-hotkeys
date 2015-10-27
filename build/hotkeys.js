@@ -342,7 +342,7 @@
         }
 
         // no duplicates please
-        _del(combo);
+        _del(combo, action);
 
         // description is optional:
         if (description instanceof Function) {
@@ -428,18 +428,19 @@
        * delete and unbind a Hotkey
        *
        * @param  {mixed} hotkey   Either the bound key or an instance of Hotkey
+       * @param  {string=} action
        * @return {boolean}        true if successful
        */
-      function _del (hotkey) {
+      function _del (hotkey, action) {
         var combo = (hotkey instanceof Hotkey) ? hotkey.combo : hotkey;
 
-        Mousetrap.unbind(combo);
+        Mousetrap.unbind(combo, action);
 
         if (angular.isArray(combo)) {
           var retStatus = true;
           var i = combo.length;
           while (i--) {
-            retStatus = _del(combo[i]) && retStatus;
+            retStatus = _del(combo[i], action) && retStatus;
           }
           return retStatus;
         } else {
@@ -1034,7 +1035,7 @@
     }
 
     function _belongsTo(element, ancestor) {
-        if (element === document) {
+        if (element === null || element === document) {
             return false;
         }
 
